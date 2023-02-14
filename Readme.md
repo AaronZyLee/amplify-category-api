@@ -89,3 +89,5 @@ Before pushing code or sending a pull request, do the following:
 ## Contributing
 
 We are thankful for any contributions from the community. Look at our [Contribution Guidelines](https://github.com/aws-amplify/amplify-category-api/blob/main/CONTRIBUTING.md).
+
+test
