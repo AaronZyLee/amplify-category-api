@@ -3,7 +3,7 @@ phases:
   install:
     runtime-versions:
       nodejs: 14
-  pre-build:
+  pre_build:
     commands:
       - yarn production-build
       - yarn build-tests
