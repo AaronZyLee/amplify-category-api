@@ -2,5 +2,5 @@ version: 0.2
 phases:
   build:
     commands: 
-      - echo 'Hello, CodeBuild from file!''
+      - echo 'Hello, CodeBuild from file!'
       - echo 'Build phase completed!'
