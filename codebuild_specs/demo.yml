@@ -1,6 +1,14 @@
 version: 0.2
 phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+  pre-build:
+    commands:
+      - yarn production-build
+      - yarn build-tests
+      - echo 'Pre-Build phase completed!'
   build:
     commands: 
-      - echo 'Hello, CodeBuild from file!'
+      - yarn test-ci
       - echo 'Build phase completed!'
