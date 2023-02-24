@@ -12,3 +12,6 @@ phases:
     commands: 
       - yarn test-ci
       - echo 'Build phase completed!'
+artifacts:
+  files:
+    - '**/*'
