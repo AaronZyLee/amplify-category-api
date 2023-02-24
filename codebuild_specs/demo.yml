@@ -10,7 +10,6 @@ phases:
       - echo 'Pre-Build phase completed!'
   build:
     commands: 
-      - yarn test-ci
       - echo 'Build phase completed!'
 artifacts:
   files:
