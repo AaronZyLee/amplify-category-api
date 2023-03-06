@@ -22,5 +22,5 @@ artifacts:
   files:
     - '**/*'
 cache:
-  path:
-    - '/usr/local/share/.cache/**/*'
+  paths:
+    - '~/.cache/**/*'
