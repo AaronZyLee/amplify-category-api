@@ -10,7 +10,15 @@ phases:
       - echo 'Pre-Build phase completed!'
   build:
     commands: 
+      - echo 'Unit tests'
+      - yarn test-ci
+      - echo 'Verify API extract'
+      - yarn verify-api-extract
       - echo 'Build phase completed!'
+  post_build:
+    commands:
+      - echo 'Yarn cache directory'
+      - yarn cache dir
 artifacts:
   files:
     - '**/*'
