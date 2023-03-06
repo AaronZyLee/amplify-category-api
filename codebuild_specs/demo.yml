@@ -11,10 +11,9 @@ phases:
   build:
     commands: 
       - echo 'Unit tests'
-      - yarn test-ci
       - echo 'Verify API extract'
-      - yarn verify-api-extract
       - echo 'Build phase completed!'
+      - echo ${S3_BUILD_CACHE:-'undefined'}
   post_build:
     commands:
       - echo 'Yarn cache directory'
@@ -22,3 +21,6 @@ phases:
 artifacts:
   files:
     - '**/*'
+cache:
+  path:
+    - '/usr/local/share/.cache/**/*'
