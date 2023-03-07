@@ -21,6 +21,11 @@ phases:
 artifacts:
   files:
     - '**/*'
+  secondary-artifacts:
+    yarn-cache:
+      base-directory: '~/.cache'
+      files:
+        - '**/*'
 cache:
   paths:
     - '~/.cache/**/*'
