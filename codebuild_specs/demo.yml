@@ -22,7 +22,7 @@ artifacts:
   files:
     - '**/*'
   secondary-artifacts:
-    yarn-cache:
+    yarnCache:
       base-directory: '~/.cache'
       files:
         - '**/*'
