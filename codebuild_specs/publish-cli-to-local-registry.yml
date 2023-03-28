@@ -6,4 +6,5 @@ phases:
       - yarn
   build:
     commands:
+       - git checkout $COMMIT_ID
        - ./scripts/publish-cli-to-local-registry.sh
