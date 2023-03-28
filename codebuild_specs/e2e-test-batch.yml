@@ -1,16 +1,16 @@
 batch:
   fast-fail: false
   build-graph:
-    - identifier: publish-cli-to-local-registry
+    - identifier: publish_cli_to_local_registry
       buildspec: codebuild_specs/publish-cli-to-local-registry.yml
       env:
         variables:
-          BUILD_ID: publish-cli-to-local-registry
+          BUILD_ID: publish_cli_to_local_registry
       ignore-failure: false
-    - identifier: amplify-e2e-tests
+    - identifier: amplify_e2e_tests
       buildspec: codebuild_specs/amplify-e2e-tests.yml
       env:
         variables:
-          BUILD_ID: amplify-e2e-tests
+          BUILD_ID: amplify_e2e_tests
       depend-on:
-        - publish-cli-to-local-registry
+        - publish_cli_to_local_registry
