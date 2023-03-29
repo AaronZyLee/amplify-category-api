@@ -6,5 +6,11 @@ phases:
       - yarn
   build:
     commands:
-       - git checkout $BRANCH_NAME
-       - ./scripts/publish-cli-to-local-registry.sh
+      - echo $HOME
+      - echo $CODEBUILD_SRC_DIR
+      - git checkout $BRANCH_NAME
+      - ./scripts/publish-cli-to-local-registry.sh
+  post_build:
+    commands:
+      - '[ ${CODEBUILD_BUILD_SUCCEEDING:-0} -eq 1 ] || exit 1'
+      - ./scripts/cache-store.sh

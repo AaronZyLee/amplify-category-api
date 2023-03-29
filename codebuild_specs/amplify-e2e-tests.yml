@@ -1,6 +1,12 @@
 version: 0.2
 
 phases:
+  pre_build:
+    commands:
+      - ./scripts/cache-load.sh
+      - ./scripts/install-cli-from-local-registry.sh
   build:
     commands:
-       - echo "Running amplify e2e tests"
+      - amplify -v
+      - npm list --global --depth=1
+      - echo "Running amplify e2e tests"
