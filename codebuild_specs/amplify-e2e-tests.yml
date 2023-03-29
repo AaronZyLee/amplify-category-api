@@ -4,11 +4,12 @@ phases:
   pre_build:
     commands:
       - ./scripts/cache-load.sh
-      - ./scripts/install-cli-from-local-registry.sh
   build:
     commands:
+      - ./scripts/install-cli-from-local-registry.sh
       - echo $PATH
       - npm list -g
+      - echo "using Amplify CLI version: "$(amplify --version)
       - amplify --version
       - npm list --global --depth=1
       - echo "Running amplify e2e tests"
