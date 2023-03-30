@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "export PATH=$AMPLIFY_DIR:$PATH" >> $BASH_ENV
-source $BASH_ENV
 source .circleci/local_publish_helpers.sh
-amplify version
+export PATH=$AMPLIFY_DIR:$PATH
+echo "using Amplify CLI version: "$(amplify --version)
+amplify --version
