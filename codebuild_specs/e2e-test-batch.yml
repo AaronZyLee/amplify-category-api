@@ -13,6 +13,7 @@ batch:
         variables:
           BUILD_ID: amplify_e2e_tests
           TEST_SUITE: datastore-modelgen.test.ts
+          CLI_REGION: us-west-2
           USE_PARENT_ACCOUNT: true
       depend-on:
         - publish_cli_to_local_registry
