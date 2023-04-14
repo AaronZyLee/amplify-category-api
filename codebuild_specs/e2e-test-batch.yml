@@ -7,13 +7,23 @@ batch:
         variables:
           BUILD_ID: publish_cli_to_local_registry
       ignore-failure: false
-    - identifier: amplify_e2e_tests
+    - identifier: amplify_e2e_tests1
       buildspec: codebuild_specs/amplify-e2e-tests.yml
       env:
         variables:
-          BUILD_ID: amplify_e2e_tests
+          BUILD_ID: amplify_e2e_tests11
           TEST_SUITE: datastore-modelgen.test.ts
           CLI_REGION: us-west-2
+          USE_PARENT_ACCOUNT: true
+      depend-on:
+        - publish_cli_to_local_registry
+    - identifier: amplify_e2e_tests2
+      buildspec: codebuild_specs/amplify-e2e-tests.yml
+      env:
+        variables:
+          BUILD_ID: amplify_e2e_tests22
+          TEST_SUITE: function_10.test.ts
+          CLI_REGION: us-west-1
           USE_PARENT_ACCOUNT: true
       depend-on:
         - publish_cli_to_local_registry
