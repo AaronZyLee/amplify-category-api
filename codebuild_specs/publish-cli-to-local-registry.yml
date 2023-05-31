@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - yarn
+  build:
+    commands:
+      - echo $HOME
+      - echo $CODEBUILD_SRC_DIR
+      - git checkout $BRANCH_NAME
+      - ./scripts/publish-cli-to-local-registry.sh
+  post_build:
+    commands:
+      - '[ ${CODEBUILD_BUILD_SUCCEEDING:-0} -eq 1 ] || exit 1'
+      - ./scripts/cache-store.sh
