@@ -2,7 +2,7 @@ const { execSync } = require("child_process");
 import { resolve } from 'path';
 import { existsSync } from 'fs-extra';
 
-let commandOne = "source ./shared-scripts.sh";
+let commandOne = "";
 let commandTwo = "_refreshCredentials"; // print the current user
 let commandThree = "pwd"; //print the name of current directory
 
@@ -14,12 +14,11 @@ export const refreshCredentials = () => {
   console.log(`src path exists: ${existsSync(pathToSourceDir)}`);
   const pathToBash = execSync('which bash').toString();
   console.log(`Found bash: ${pathToBash}`);
-  const listCurrFiles = execSync(`pwd`, { shell: pathToBash });
+  const listCurrFiles = execSync('pwd');
   console.log(listCurrFiles?.toString());
+  console.log(execSync('ls').toString());
 
-  const cdResult = execSync(`cd ${pathToSourceDir}`, { shell: pathToBash });
-  console.log(cdResult?.toString());
-  const result = execSync(`${commandThree} && ${commandOne} && ${commandTwo} && ${commandThree}`, { shell: pathToBash });
+  const result = execSync(`cd ${pathToSourceDir} && source ./shared-scripts.sh && _refreshCredentials`, { shell: pathToBash });
   console.log(result?.toString());
   console.log(JSON.stringify(result));
   return;
