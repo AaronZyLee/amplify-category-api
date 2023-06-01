@@ -18,7 +18,7 @@ export const refreshCredentials = () => {
   console.log(listCurrFiles?.toString());
   console.log(execSync('ls').toString());
 
-  const result = execSync(`cd ${pathToSourceDir} && source ./shared-scripts.sh && _refreshCredentials`, { shell: pathToBash });
+  const result = execSync(`cd ${pathToSourceDir} && source ./shared-scripts.sh && _refreshCredentials`);
   console.log(result?.toString());
   console.log(JSON.stringify(result));
   return;

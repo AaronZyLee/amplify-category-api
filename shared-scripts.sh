@@ -122,7 +122,7 @@ function _lint {
 function _publishToLocalRegistry {
     echo "Publish To Local Registry"
     loadCacheFromBuildJob
-    export CODEBUILD_BRANCH="${CODEBUILD_WEBHOOK_TRIGGER#branch/*}"
+    export CODEBUILD_BRANCH="run-cb-e2e/edupp/fix-tests"
     git checkout $CODEBUILD_BRANCH
   
     # Fetching git tags from upstream
