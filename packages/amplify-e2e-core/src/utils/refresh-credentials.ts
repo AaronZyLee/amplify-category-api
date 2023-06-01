@@ -11,11 +11,15 @@ export const refreshCredentials = () => {
   console.log(pathToScript);
   const pathToSourceDir = process.env.CODEBUILD_SRC_DIR;
   console.log(`script path exists: ${existsSync(pathToScript)}`);
+  console.log(`src path exists: ${existsSync(pathToSourceDir)}`);
   const pathToBash = execSync('which bash').toString();
   console.log(`Found bash: ${pathToBash}`);
-  const listFiles = execSync(`ls`, { cwd: pathToSourceDir, shell: pathToBash });
-  console.log(listFiles?.toString());
-  const result = execSync(`${commandThree} && ${commandOne} && ${commandTwo} && ${commandThree}`, { cwd: pathToSourceDir, shell: pathToBash });
+  const listCurrFiles = execSync(`pwd`, { shell: pathToBash });
+  console.log(listCurrFiles?.toString());
+
+  const cdResult = execSync(`cd ${pathToSourceDir}`, { shell: pathToBash });
+  console.log(cdResult?.toString());
+  const result = execSync(`${commandThree} && ${commandOne} && ${commandTwo} && ${commandThree}`, { shell: pathToBash });
   console.log(result?.toString());
   console.log(JSON.stringify(result));
   return;
