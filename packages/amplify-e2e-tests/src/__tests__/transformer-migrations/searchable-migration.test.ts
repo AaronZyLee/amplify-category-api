@@ -8,11 +8,10 @@ import {
   addAuthWithDefault,
 } from 'amplify-category-api-e2e-core';
 import { addApiWithoutSchema, updateApiSchema, getProjectMeta } from 'amplify-category-api-e2e-core';
-import { createNewProjectDir, deleteProjectDir } from 'amplify-category-api-e2e-core';
+import { createNewProjectDir, deleteProjectDir, refreshCredentials } from 'amplify-category-api-e2e-core';
 import gql from 'graphql-tag';
 import AWSAppSyncClient, { AUTH_TYPE } from 'aws-appsync';
 (global as any).fetch = require('node-fetch');
-import { STS } from 'aws-sdk';
 
 jest.setTimeout(120 * 60 * 1000); // Set timeout to 2 hour because of creating/deleting searchable instance
 
@@ -29,6 +28,7 @@ describe('transformer model searchable migration test', () => {
     await initJSProjectWithProfile(projRoot, {
       name: projectName,
     });
+    refreshCredentials();
     await addAuthWithDefault(projRoot, {});
     currentTimestamp = new Date().getTime();
     console.log(`time after before block: ${currentTimestamp}`);
@@ -56,7 +56,6 @@ describe('transformer model searchable migration test', () => {
     await amplifyPush(projRoot);
     currentTimestamp = new Date().getTime();
     console.log(`time after first push: ${currentTimestamp}`);
-    await refreshCredentials();
 
     appSyncClient = getAppSyncClientFromProj(projRoot);
     await runAndValidateQuery('test1', 'test1', 10);
@@ -131,42 +130,6 @@ describe('transformer model searchable migration test', () => {
     expect(response.data.createTodo).toBeDefined();
   };
 });
-
-const refreshCredentials = async () => {
-  const testRole = process.env.TEST_ACCOUNT_ROLE;
-  console.log(`Test account role from test: ${testRole}`);
-
-  try {
-    console.log(`before reset env vars: ${areEnvVarsSet()}`);
-    delete process.env.AWS_ACCESS_KEY_ID;
-    delete process.env.AWS_SECRET_ACCESS_KEY;
-    delete process.env.AWS_SESSION_TOKEN;
-
-    console.log(`after reset env vars: ${areEnvVarsSet()}`);
-
-    const sts = new STS({
-      apiVersion: '2011-06-15'
-    });
-    const testAccountIdentity = await sts.getCallerIdentity().promise();
-    console.log(`Using Test role identity: ${JSON.stringify(testAccountIdentity)}`);
-
-    const assumeRoleRes = await sts.assumeRole({
-      RoleArn: testRole,
-      RoleSessionName: `testSession12249`,
-      // One hour
-      DurationSeconds: 1 * 60 * 60,
-    }).promise();
-
-    process.env['AWS_ACCESS_KEY_ID'] = assumeRoleRes.Credentials.AccessKeyId;
-    process.env['AWS_SECRET_ACCESS_KEY'] = assumeRoleRes.Credentials.SecretAccessKey;
-    process.env['AWS_SESSION_TOKEN'] = assumeRoleRes.Credentials.SessionToken;
-
-    console.log(`after refresh env vars: ${areEnvVarsSet()}`);
-  }
-  catch(err) {
-    console.log(err);
-  }
-}
 
 const areEnvVarsSet = () => {
   const envVars = {
