@@ -42,9 +42,7 @@ const RUN_SOLO = [
   'src/__tests__/schema-connection.test.ts',
   'src/__tests__/transformer-migrations/searchable-migration.test.ts',
 ];
-const EXCLUDE_E2E_TESTS = [
-  'src/__tests__/transformer-migrations/searchable-migration.test.ts',
-]
+const EXCLUDE_E2E_TESTS: string[] = []
 
 export function loadConfigBase() {
   return yaml.load(fs.readFileSync(CODEBUILD_CONFIG_BASE_PATH, 'utf8'));

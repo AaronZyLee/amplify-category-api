@@ -190,6 +190,7 @@ function _runE2ETestsLinux {
     echo "Run Amplify E2E tests"
     echo $TEST_SUITE
     _loadTestAccountCredentials
+    codebuild-breakpoint
     retry runE2eTest
 }
 function _runMigrationV5Test {
@@ -349,6 +350,7 @@ function runE2eTest {
     if [ -f  $FAILED_TEST_REGEX_FILE ]; then
         # read the content of failed tests
         failedTests=$(<$FAILED_TEST_REGEX_FILE)
+        codebuild-breakpoint
         yarn run e2e --maxWorkers=4 $TEST_SUITE -t "$failedTests"
     else
         yarn run e2e --maxWorkers=4 $TEST_SUITE
