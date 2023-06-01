@@ -136,19 +136,19 @@ const refreshCredentials = async () => {
   const testRole = process.env.TEST_ACCOUNT_ROLE;
   console.log(`Test account role from test: ${testRole}`);
 
-  const sts = new STS({
-    apiVersion: '2011-06-15'
-  });
   try {
-    const testAccountIdentity = await sts.getCallerIdentity().promise();
-    console.log(`Using Test role identity: ${JSON.stringify(testAccountIdentity)}`);
-
     console.log(`before reset env vars: ${areEnvVarsSet()}`);
     delete process.env.AWS_ACCESS_KEY_ID;
     delete process.env.AWS_SECRET_ACCESS_KEY;
     delete process.env.AWS_SESSION_TOKEN;
 
     console.log(`after reset env vars: ${areEnvVarsSet()}`);
+
+    const sts = new STS({
+      apiVersion: '2011-06-15'
+    });
+    const testAccountIdentity = await sts.getCallerIdentity().promise();
+    console.log(`Using Test role identity: ${JSON.stringify(testAccountIdentity)}`);
 
     const assumeRoleRes = await sts.assumeRole({
       RoleArn: testRole,
@@ -175,9 +175,9 @@ const areEnvVarsSet = () => {
     sess: process.env.AWS_SESSION_TOKEN
   };
   if (envVars?.acskey && envVars?.seckey && envVars?.sess) {
-    console.log('Env vars are set');
+    return true;
   }
   else {
-    console.log('Env vars are NOT set');
+    return false;
   }
 }
