@@ -28,7 +28,9 @@ describe('transformer model searchable migration test', () => {
     await initJSProjectWithProfile(projRoot, {
       name: projectName,
     });
+    displayUserIdentity();
     refreshCredentials();
+    displayUserIdentity();
     await addAuthWithDefault(projRoot, {});
     currentTimestamp = new Date().getTime();
     console.log(`time after before block: ${currentTimestamp}`);
@@ -131,16 +133,11 @@ describe('transformer model searchable migration test', () => {
   };
 });
 
-const areEnvVarsSet = () => {
+const displayUserIdentity = () => {
   const envVars = {
     acskey: process.env.AWS_ACCESS_KEY_ID,
     seckey: process.env.AWS_SECRET_ACCESS_KEY,
     sess: process.env.AWS_SESSION_TOKEN
   };
-  if (envVars?.acskey && envVars?.seckey && envVars?.sess) {
-    return true;
-  }
-  else {
-    return false;
-  }
-}
+  console.log(JSON.stringify(envVars));
+};

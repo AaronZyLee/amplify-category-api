@@ -8,7 +8,12 @@ let commandThree = "pwd"; //print the name of current directory
 export const refreshCredentials = () => {
   const pathToScript = resolve(`${__dirname}/../../../..`);
   console.log(pathToScript);
-  execSync(`${commandThree} && ${commandOne} && ${commandTwo} && ${commandThree}`, { cwd: pathToScript, shell: '/bin/bash' });
+  const pathToBash = execSync('which bash');
+  console.log(`Found bash -1: ${pathToBash} and ${pathToBash.toString()}`);
+  const bashShell = pathToBash ? pathToBash.toString() : '/usr/bin/bash';
+  const result = execSync(`${commandThree} && ${commandOne} && ${commandTwo} && ${commandThree}`, { cwd: pathToScript, shell: bashShell });
+  console.log(result?.toString());
+  console.log(JSON.stringify(result));
   return;
 };
 
