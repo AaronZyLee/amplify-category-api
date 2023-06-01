@@ -1,5 +1,6 @@
 const { execSync } = require("child_process");
 import { resolve } from 'path';
+import { existsSync } from 'fs-extra';
 
 let commandOne = "source ./shared-scripts.sh";
 let commandTwo = "_refreshCredentials"; // print the current user
@@ -8,10 +9,13 @@ let commandThree = "pwd"; //print the name of current directory
 export const refreshCredentials = () => {
   const pathToScript = resolve(`${__dirname}/../../../..`);
   console.log(pathToScript);
-  const pathToBash = execSync('which bash');
-  console.log(`Found bash -1: ${pathToBash} and ${pathToBash.toString()}`);
-  const bashShell = pathToBash ? pathToBash.toString() : '/usr/bin/bash';
-  const result = execSync(`${commandThree} && ${commandOne} && ${commandTwo} && ${commandThree}`, { cwd: pathToScript, shell: bashShell });
+  const pathToSourceDir = process.env.CODEBUILD_SRC_DIR;
+  console.log(`script path exists: ${existsSync(pathToScript)}`);
+  const pathToBash = execSync('which bash').toString();
+  console.log(`Found bash: ${pathToBash}`);
+  const listFiles = execSync(`ls`, { cwd: pathToSourceDir, shell: pathToBash });
+  console.log(listFiles?.toString());
+  const result = execSync(`${commandThree} && ${commandOne} && ${commandTwo} && ${commandThree}`, { cwd: pathToSourceDir, shell: pathToBash });
   console.log(result?.toString());
   console.log(JSON.stringify(result));
   return;
