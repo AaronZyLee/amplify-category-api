@@ -8,7 +8,7 @@ let commandThree = "pwd"; //print the name of current directory
 export const refreshCredentials = () => {
   const pathToScript = resolve(`${__dirname}/../../../..`);
   console.log(pathToScript);
-  execSync(`${commandThree} && ${commandOne} && ${commandTwo} && ${commandThree}`, { cwd: pathToScript });
+  execSync(`${commandThree} && ${commandOne} && ${commandTwo} && ${commandThree}`, { cwd: pathToScript, shell: '/bin/bash' });
   return;
 };
 

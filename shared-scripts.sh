@@ -193,6 +193,7 @@ function _runE2ETestsLinux {
     _logUserIdentity
     _loadTestAccountCredentials
     codebuild-breakpoint
+    _setShell
     retry runE2eTest
 }
 function _runMigrationV5Test {
