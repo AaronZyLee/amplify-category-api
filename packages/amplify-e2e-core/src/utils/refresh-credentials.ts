@@ -16,6 +16,11 @@ export const refreshCredentials = () => {
 
   const result = execSync(`./refresh-credentials.sh`, { shell: true });
   console.log(result?.toString());
-  console.log(JSON.stringify(result));
+  const result1 = execSync(`
+  echo $AWS_ACCESS_KEY_ID
+  echo $AWS_SECRET_ACCESS_KEY
+  echo $AWS_SESSION_TOKEN
+  `, { shell: true });
+  console.log(result1?.toString());
   return;
 };
