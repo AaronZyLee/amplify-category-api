@@ -29,6 +29,14 @@ describe('transformer model searchable migration test', () => {
       name: projectName,
     });
 
+    await addAuthWithDefault(projRoot, {});
+    currentTimestamp = new Date().getTime();
+    console.log(`time after before block: ${currentTimestamp}`);
+  });
+
+  afterEach(async () => {
+    currentTimestamp = new Date().getTime();
+    console.log(`time before after block: ${currentTimestamp}`);
     console.log('creds before refresh');
     displaySessionInfo();
 
@@ -42,14 +50,6 @@ describe('transformer model searchable migration test', () => {
     console.log('creds after env set');
     displaySessionInfo();
 
-    await addAuthWithDefault(projRoot, {});
-    currentTimestamp = new Date().getTime();
-    console.log(`time after before block: ${currentTimestamp}`);
-  });
-
-  afterEach(async () => {
-    currentTimestamp = new Date().getTime();
-    console.log(`time before after block: ${currentTimestamp}`);
     await deleteProject(projRoot);
     deleteProjectDir(projRoot);
     currentTimestamp = new Date().getTime();
