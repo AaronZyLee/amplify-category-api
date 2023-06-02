@@ -28,14 +28,19 @@ describe('transformer model searchable migration test', () => {
     await initJSProjectWithProfile(projRoot, {
       name: projectName,
     });
+
     console.log('creds before refresh');
-    displayUserIdentity();
+    displaySessionInfo();
+
     const creds = refreshCredentials();
+
     console.log('creds after refresh');
-    displayUserIdentity();
+    displaySessionInfo();
+
     setCredsInEnv(creds);
+
     console.log('creds after env set');
-    displayUserIdentity();
+    displaySessionInfo();
 
     await addAuthWithDefault(projRoot, {});
     currentTimestamp = new Date().getTime();
@@ -139,18 +144,15 @@ describe('transformer model searchable migration test', () => {
   };
 });
 
-const displayUserIdentity = () => {
+const displaySessionInfo = () => {
   const envVars = {
-    acskey: process.env.AWS_ACCESS_KEY_ID,
-    seckey: process.env.AWS_SECRET_ACCESS_KEY,
-    sess: process.env.AWS_SESSION_TOKEN
+    acskey: process.env.AWS_ACCESS_KEY_ID
   };
   console.log(JSON.stringify(envVars));
 };
 
 const setCredsInEnv = (creds) => {
   if (creds) {
-    console.log('setting creds in js env');
     process.env['AWS_ACCESS_KEY_ID'] = creds.AWS_ACCESS_KEY_ID;
     process.env['AWS_SECRET_ACCESS_KEY'] = creds.AWS_SECRET_ACCESS_KEY;
     process.env['AWS_SESSION_TOKEN'] = creds.AWS_SESSION_TOKEN;
