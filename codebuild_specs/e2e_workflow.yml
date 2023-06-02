@@ -42,6 +42,7 @@ batch:
           TEST_SUITE: src/__tests__/transformer-migrations/searchable-migration.test.ts
           CLI_REGION: us-east-1
           USE_PARENT_ACCOUNT: 1
+      debug-session: true
       depend-on:
         - publish_to_local_registry
     - identifier: cleanup_e2e_resources
