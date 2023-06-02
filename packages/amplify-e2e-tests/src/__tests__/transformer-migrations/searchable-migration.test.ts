@@ -28,9 +28,15 @@ describe('transformer model searchable migration test', () => {
     await initJSProjectWithProfile(projRoot, {
       name: projectName,
     });
+    console.log('creds before refresh');
     displayUserIdentity();
-    refreshCredentials();
+    const creds = refreshCredentials();
+    console.log('creds after refresh');
     displayUserIdentity();
+    setCredsInEnv(creds);
+    console.log('creds after env set');
+    displayUserIdentity();
+
     await addAuthWithDefault(projRoot, {});
     currentTimestamp = new Date().getTime();
     console.log(`time after before block: ${currentTimestamp}`);
@@ -140,4 +146,13 @@ const displayUserIdentity = () => {
     sess: process.env.AWS_SESSION_TOKEN
   };
   console.log(JSON.stringify(envVars));
+};
+
+const setCredsInEnv = (creds) => {
+  if (creds) {
+    console.log('setting creds in js env');
+    process.env['AWS_ACCESS_KEY_ID'] = creds.AWS_ACCESS_KEY_ID;
+    process.env['AWS_SECRET_ACCESS_KEY'] = creds.AWS_SECRET_ACCESS_KEY;
+    process.env['AWS_SESSION_TOKEN'] = creds.AWS_SESSION_TOKEN;
+  }
 };
