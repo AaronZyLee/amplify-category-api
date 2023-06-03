@@ -14,7 +14,7 @@ export const refreshCredentials = () => {
       return creds;
     }
   }
-  return;
+  return stringifedCreds;
 };
 
 export const refreshTestProfileCredentials = (creds: AWSTempCredentials) => {
@@ -45,4 +45,12 @@ export const displaySessionInfo = () => {
   };
   console.log(JSON.stringify(envVars));
   displaySharedCreds();
+};
+
+export const setCredsInEnv = (creds: AWSTempCredentials | undefined) => {
+  if (creds) {
+    process.env['AWS_ACCESS_KEY_ID'] = creds.AWS_ACCESS_KEY_ID;
+    process.env['AWS_SECRET_ACCESS_KEY'] = creds.AWS_SECRET_ACCESS_KEY;
+    process.env['AWS_SESSION_TOKEN'] = creds.AWS_SESSION_TOKEN;
+  }
 };

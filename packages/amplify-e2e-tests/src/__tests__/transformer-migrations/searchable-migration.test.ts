@@ -8,7 +8,7 @@ import {
   addAuthWithDefault,
 } from 'amplify-category-api-e2e-core';
 import { addApiWithoutSchema, updateApiSchema, getProjectMeta } from 'amplify-category-api-e2e-core';
-import { createNewProjectDir, deleteProjectDir, refreshCredentials, displaySessionInfo } from 'amplify-category-api-e2e-core';
+import { createNewProjectDir, deleteProjectDir, refreshCredentials, displaySessionInfo, setCredsInEnv } from 'amplify-category-api-e2e-core';
 import gql from 'graphql-tag';
 import AWSAppSyncClient, { AUTH_TYPE } from 'aws-appsync';
 (global as any).fetch = require('node-fetch');
@@ -46,6 +46,10 @@ describe('transformer model searchable migration test', () => {
     displaySessionInfo();
     console.log('refreshing creds');
     const creds = refreshCredentials();
+    console.log(`creds returned: ${creds}`)
+    displaySessionInfo();
+    setCredsInEnv(creds);
+    console.log(`after env set`)
     displaySessionInfo();
     await amplifyPush(projRoot);
 
