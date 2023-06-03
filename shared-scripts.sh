@@ -189,6 +189,7 @@ function _runE2ETestsLinux {
     amplify version
     echo "Run Amplify E2E tests"
     echo $TEST_SUITE
+    _loadTestAccountCredentials
     _setShell
     retry runE2eTest
 }
