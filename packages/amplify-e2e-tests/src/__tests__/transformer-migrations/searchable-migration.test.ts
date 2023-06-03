@@ -50,8 +50,11 @@ describe('transformer model searchable migration test', () => {
     await addFeatureFlag(projRoot, 'graphqltransformer', 'transformerVersion', 2);
     await addFeatureFlag(projRoot, 'graphqltransformer', 'useExperimentalPipelinedTransformer', true);
 
+    console.log('before update api');
     await updateApiSchema(projRoot, projectName, v2Schema);
+    console.log('before second push');
     await amplifyPushUpdate(projRoot);
+    console.log('after second push');
 
     appSyncClient = getAppSyncClientFromProj(projRoot);
     await runAndValidateQuery('test2', 'test2', 10);
