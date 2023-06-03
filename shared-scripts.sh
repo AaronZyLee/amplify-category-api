@@ -122,7 +122,7 @@ function _lint {
 function _publishToLocalRegistry {
     echo "Publish To Local Registry"
     loadCacheFromBuildJob
-    export CODEBUILD_BRANCH="run-cb-e2e/edupp/fix-tests"
+    export CODEBUILD_BRANCH="${CODEBUILD_WEBHOOK_TRIGGER#branch/*}"
     git checkout $CODEBUILD_BRANCH
   
     # Fetching git tags from upstream
@@ -189,10 +189,6 @@ function _runE2ETestsLinux {
     amplify version
     echo "Run Amplify E2E tests"
     echo $TEST_SUITE
-    _checkEnvCreds
-    _logUserIdentity
-    _loadTestAccountCredentials
-    codebuild-breakpoint
     _setShell
     retry runE2eTest
 }
@@ -302,7 +298,7 @@ function retry {
 
     resetAwsAccountCredentials
     TEST_SUITE=${TEST_SUITE:-"TestSuiteNotSet"}
-    aws cloudwatch put-metric-data --metric-name FlakyE2ETests --namespace amplify-category-api-e2e-tests --unit Count --value $n --dimensions testFile=$TEST_SUITE
+    aws cloudwatch put-metric-data --metric-name FlakyE2ETests --namespace amplify-category-api-e2e-tests --unit Count --value $n --dimensions testFile=$TEST_SUITE --profile amplify-integ-test-user
     echo "Attempt $n succeeded."
     exit 0 # don't fail the step if putting the metric fails
 }
@@ -390,39 +386,4 @@ function emitCanaryFailureMetric {
             --dimensions branch=main \
             --region us-west-2
     fi
-}
-
-function _unassumeTestAccountCredentials {
-    echo "Unassume Role"
-    unset AWS_ACCESS_KEY_ID
-    unset AWS_SECRET_ACCESS_KEY
-    unset AWS_SESSION_TOKEN
-}
-
-function _checkEnvCreds {
-    echo "Environment credentials"
-    echo $AWS_ACCESS_KEY_ID
-    echo $AWS_SECRET_ACCESS_KEY
-    echo $AWS_SESSION_TOKEN
-}
-
-function _logUserIdentity {
-    echo "User Identity Account"
-    echo $(aws sts get-caller-identity | jq -cr '.Account')
-}
-
-function _refreshCredentials {
-    echo "Refreshing temporary credentials"
-    _checkEnvCreds
-    _logUserIdentity
-    _unassumeTestAccountCredentials
-
-    echo "After clearing current credentials"
-    _checkEnvCreds
-    _logUserIdentity
-    _loadTestAccountCredentials
-
-    echo "After resetting temp credentials"
-    _checkEnvCreds
-    _logUserIdentity
 }

@@ -14,7 +14,6 @@ export const refreshCredentials = () => {
       return creds;
     }
   }
-
   return;
 };
 
@@ -38,4 +37,12 @@ export const displaySharedCreds = () => {
   const profileName = 'amplify-integ-test-user';
   const credentialsContents = ini.parse(readFileSync(pathManager.getAWSCredentialsFilePath()).toString());
   console.log(`shared creds: ${ini.stringify(credentialsContents[profileName])}`)
+};
+
+export const displaySessionInfo = () => {
+  const envVars = {
+    acskey: process.env.AWS_ACCESS_KEY_ID
+  };
+  console.log(JSON.stringify(envVars));
+  displaySharedCreds();
 };

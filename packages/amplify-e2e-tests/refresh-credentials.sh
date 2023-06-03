@@ -3,20 +3,16 @@
 # set exit on error to true
 set -e
 
-# Unassume the current role
+# Un-assume the current role
 unset AWS_ACCESS_KEY_ID
 unset AWS_SECRET_ACCESS_KEY
 unset AWS_SESSION_TOKEN
 
-session_id=1248634
-# Use longer time for parent account role
+# Re-assume the e2e test account role
+session_id=$((1 + $RANDOM % 10000))
 creds=$(aws sts assume-role --role-arn $TEST_ACCOUNT_ROLE --role-session-name testSession${session_id} --duration-seconds 3600)
 if [ -z $(echo $creds | jq -c -r '.AssumedRoleUser.Arn') ]; then
     return
 fi
-
-export AWS_ACCESS_KEY_ID=$(echo $creds | jq -c -r ".Credentials.AccessKeyId")
-export AWS_SECRET_ACCESS_KEY=$(echo $creds | jq -c -r ".Credentials.SecretAccessKey")
-export AWS_SESSION_TOKEN=$(echo $creds | jq -c -r ".Credentials.SessionToken")
 
 echo "{ \"AWS_ACCESS_KEY_ID\": \"$AWS_ACCESS_KEY_ID\", \"AWS_SECRET_ACCESS_KEY\": \"$AWS_SECRET_ACCESS_KEY\", \"AWS_SESSION_TOKEN\": \"$AWS_SESSION_TOKEN\" }"

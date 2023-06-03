@@ -19,8 +19,6 @@ describe('transformer model searchable migration test', () => {
   let projRoot: string;
   let projectName: string;
   let appSyncClient = undefined;
-  let currentTimestamp = new Date().getTime();
-  console.log(`started test at: ${currentTimestamp}`);
 
   beforeEach(async () => {
     projectName = createRandomName();
@@ -30,45 +28,21 @@ describe('transformer model searchable migration test', () => {
     });
 
     await addAuthWithDefault(projRoot, {});
-    currentTimestamp = new Date().getTime();
-    console.log(`time after before block: ${currentTimestamp}`);
   });
 
   afterEach(async () => {
-    currentTimestamp = new Date().getTime();
-    console.log(`time before after block: ${currentTimestamp}`);
-    console.log('creds before refresh');
-    displaySessionInfo();
-
     const creds = refreshCredentials();
-
-    console.log('creds after refresh');
-    displaySessionInfo();
-
-    setCredsInEnv(creds);
-
-    console.log('creds after env set');
-    displaySessionInfo();
-
-    await deleteProject(projRoot);
+    await deleteProject(projRoot, creds);
     deleteProjectDir(projRoot);
-    currentTimestamp = new Date().getTime();
-    console.log(`time after after block: ${currentTimestamp}`);
   });
 
   it('migration of searchable directive - search should return expected results', async () => {
-    currentTimestamp = new Date().getTime();
-    console.log(`time before test block: ${currentTimestamp}`);
     const v1Schema = 'transformer_migration/searchable-v1.graphql';
     const v2Schema = 'transformer_migration/searchable-v2.graphql';
 
     await addApiWithoutSchema(projRoot, { apiName: projectName, transformerVersion: 1 });
     await updateApiSchema(projRoot, projectName, v1Schema);
-    currentTimestamp = new Date().getTime();
-    console.log(`time before first push: ${currentTimestamp}`);
     await amplifyPush(projRoot);
-    currentTimestamp = new Date().getTime();
-    console.log(`time after first push: ${currentTimestamp}`);
 
     appSyncClient = getAppSyncClientFromProj(projRoot);
     await runAndValidateQuery('test1', 'test1', 10);
@@ -77,14 +51,10 @@ describe('transformer model searchable migration test', () => {
     await addFeatureFlag(projRoot, 'graphqltransformer', 'useExperimentalPipelinedTransformer', true);
 
     await updateApiSchema(projRoot, projectName, v2Schema);
-    currentTimestamp = new Date().getTime();
-    console.log(`time before second push: ${currentTimestamp}`);
     await amplifyPushUpdate(projRoot);
 
     appSyncClient = getAppSyncClientFromProj(projRoot);
     await runAndValidateQuery('test2', 'test2', 10);
-    currentTimestamp = new Date().getTime();
-    console.log(`time after test block: ${currentTimestamp}`);
   });
 
   const getAppSyncClientFromProj = (projRoot: string) => {
@@ -143,19 +113,3 @@ describe('transformer model searchable migration test', () => {
     expect(response.data.createTodo).toBeDefined();
   };
 });
-
-const displaySessionInfo = () => {
-  const envVars = {
-    acskey: process.env.AWS_ACCESS_KEY_ID
-  };
-  console.log(JSON.stringify(envVars));
-  displaySharedCreds();
-};
-
-const setCredsInEnv = (creds) => {
-  if (creds) {
-    process.env['AWS_ACCESS_KEY_ID'] = creds.AWS_ACCESS_KEY_ID;
-    process.env['AWS_SECRET_ACCESS_KEY'] = creds.AWS_SECRET_ACCESS_KEY;
-    process.env['AWS_SESSION_TOKEN'] = creds.AWS_SESSION_TOKEN;
-  }
-};
