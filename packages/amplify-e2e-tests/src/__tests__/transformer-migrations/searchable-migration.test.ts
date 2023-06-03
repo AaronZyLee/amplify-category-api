@@ -8,7 +8,7 @@ import {
   addAuthWithDefault,
 } from 'amplify-category-api-e2e-core';
 import { addApiWithoutSchema, updateApiSchema, getProjectMeta } from 'amplify-category-api-e2e-core';
-import { createNewProjectDir, deleteProjectDir, refreshCredentials } from 'amplify-category-api-e2e-core';
+import { createNewProjectDir, deleteProjectDir, refreshCredentials, displaySessionInfo } from 'amplify-category-api-e2e-core';
 import gql from 'graphql-tag';
 import AWSAppSyncClient, { AUTH_TYPE } from 'aws-appsync';
 (global as any).fetch = require('node-fetch');
@@ -31,8 +31,9 @@ describe('transformer model searchable migration test', () => {
   });
 
   afterEach(async () => {
-    const creds = refreshCredentials();
-    await deleteProject(projRoot, creds);
+    console.log(`inside after: ${projRoot}`);
+    await deleteProject(projRoot);
+    console.log('after delete proj');
     deleteProjectDir(projRoot);
   });
 
@@ -42,6 +43,10 @@ describe('transformer model searchable migration test', () => {
 
     await addApiWithoutSchema(projRoot, { apiName: projectName, transformerVersion: 1 });
     await updateApiSchema(projRoot, projectName, v1Schema);
+    displaySessionInfo();
+    console.log('refreshing creds');
+    const creds = refreshCredentials();
+    displaySessionInfo();
     await amplifyPush(projRoot);
 
     appSyncClient = getAppSyncClientFromProj(projRoot);
