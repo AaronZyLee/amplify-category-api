@@ -608,7 +608,7 @@ const getAccountsToCleanup = async (): Promise<AWSAccountInfo[]> => {
   });
   const assumeRoleResForE2EParent = await stsClient
   .assumeRole({
-    RoleArn: process.env.testAccountRole,
+    RoleArn: process.env.TEST_ACCOUNT_ROLE,
     RoleSessionName: `testSession${Math.floor(Math.random() * 100000)}`,
     // One hour
     DurationSeconds: 1 * 60 * 60,
@@ -662,9 +662,7 @@ const getAccountsToCleanup = async (): Promise<AWSAccountInfo[]> => {
     return [
       {
         accountId: parentAccountIdentity.Account,
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-        sessionToken: process.env.AWS_SESSION_TOKEN,
+        ...e2eParentAccountCred
       },
     ];
   }
