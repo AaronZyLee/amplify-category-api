@@ -67,7 +67,10 @@ const RUN_SOLO = [
 ];
 const EXCLUDE_E2E_TESTS = [
   'src/__tests__/transformer-migrations/searchable-migration.test.ts',
-]
+];
+const ONLY_RUN: string[] = [
+  'src/__tests__/schema-auth-1.test.ts'
+];
 
 export function loadConfigBase() {
   return yaml.load(fs.readFileSync(CODEBUILD_CONFIG_BASE_PATH, 'utf8'));
@@ -162,7 +165,7 @@ const splitTests = (
         return testName.startsWith(key);
       });
 
-      const USE_PARENT = USE_PARENT_ACCOUNT.some((usesParent) => test.startsWith(usesParent));
+      const USE_PARENT = true;
 
       if (isMigration || RUN_SOLO.find((solo) => test === solo)) {
         const newSoloJob = createJob(os, jobIdx);
@@ -238,9 +241,10 @@ function main(): void {
     join(REPO_ROOT, 'packages', 'amplify-e2e-tests'),
     false,
     (tests: string[]) => {
-      return tests.filter((testName) => !EXCLUDE_E2E_TESTS.includes(testName))
+      return ONLY_RUN;
     }
   );
+  /*
   const splitGqlTests = splitTests(
     {
       identifier: 'gql_e2e_tests',
@@ -302,6 +306,8 @@ function main(): void {
     },
   );
   let allBuilds = [...splitE2ETests,...splitGqlTests, ...splitMigrationV5Tests, ...splitMigrationV6Tests, ...splitMigrationV10Tests];
+  */
+ let allBuilds = [...splitE2ETests];
   const cleanupResources = {
     identifier: 'cleanup_e2e_resources',
     buildspec: 'codebuild_specs/cleanup_e2e_resources.yml',

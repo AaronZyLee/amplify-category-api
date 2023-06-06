@@ -11,4 +11,5 @@ env:
 phases:
   build:
     commands:
+      - aws sts get-caller-identity
       - source ./shared-scripts.sh && _cleanupE2EResources
