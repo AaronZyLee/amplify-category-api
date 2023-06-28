@@ -1,13 +1,12 @@
 version: 0.2
 env:
   shell: bash
-
-batch:
-  fast-fail: false
-  build-graph:
-    - identifier: build_linux
-      buildspec: codebuild_specs/build_linux.yml
-    - identifier: cleanup_e2e_resources
-      buildspec: codebuild_specs/cleanup_e2e_resources.yml
-      depend-on:
-        - build_linux
+  variables:
+    CI: true
+    CODEBUILD: true
+    
+phases:
+  build:
+    commands:
+      - yarn
+      - cd packages/amplify-e2e-tests && yarn clean-cb-e2e-resources
